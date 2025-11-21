@@ -12,6 +12,8 @@ import ipaddress
 class SubnetCalculatorApp(App):
     """Aplicación de calculadora de subredes"""
     
+    TITLE = "🧮 Calculadora de Subredes"
+    
     CSS = """
     Screen {
         background: $surface;

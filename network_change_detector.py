@@ -20,6 +20,8 @@ from platform_utils import get_ping_fast_command
 class NetworkChangeDetectorApp(App):
     """Aplicación de detección de cambios en la red"""
     
+    TITLE = "🔔 Detector de Cambios en Red"
+    
     CSS = """
     Screen {
         background: $surface;

@@ -15,6 +15,8 @@ from functools import partial
 class SSLCheckerApp(App):
     """Aplicación de verificación de certificados SSL/TLS"""
     
+    TITLE = "🔒 Verificador SSL/TLS"
+    
     CSS = """
     Screen {
         background: $surface;

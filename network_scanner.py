@@ -113,6 +113,8 @@ class NetworkInfo(Static):
 class NetworkScannerApp(App):
     """Aplicación de escaneo de red local"""
     
+    TITLE = "📶 Escáner de Red"
+    
     CSS = """
     Screen {
         background: $surface;

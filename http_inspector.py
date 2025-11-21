@@ -9,6 +9,8 @@ import json
 class HTTPInspectorApp(App):
     """Herramienta para inspeccionar peticiones HTTP"""
     
+    TITLE = "🌐 Inspector HTTP"
+    
     CSS = """
     Screen {
         background: $surface;

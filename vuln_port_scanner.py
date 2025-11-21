@@ -9,7 +9,9 @@ from concurrent.futures import ThreadPoolExecutor
 import time
 
 class VulnPortScannerApp(App):
-    """Analizador de puertos con detección de vulnerabilidades"""
+    """Escáner de puertos con detección de vulnerabilidades"""
+    
+    TITLE = "🔍 Escáner de Vulnerabilidades"
     
     CSS = """
     Screen {

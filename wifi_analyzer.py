@@ -160,18 +160,34 @@ class WiFiAnalyzer(App):
                 
                 # Actualizar resumen
                 total = len(networks)
-                open_nets = sum(1 for n in networks if n['security'] == 'Abierta')
-                secure_nets = total - open_nets
                 
-                # Detectar congestión de canales
-                channels = {}
-                for net in networks:
-                    ch = net['channel']
-                    channels[ch] = channels.get(ch, 0) + 1
-                
-                most_used = max(channels.items(), key=lambda x: x[1]) if channels else (None, 0)
-                
-                summary_text = f"""[bold cyan]═══ REDES WIFI DETECTADAS ═══[/]
+                if total == 0:
+                    # No se detectaron redes
+                    summary_text = """[bold cyan]═══ REDES WIFI DETECTADAS ═══[/]
+
+[yellow]⚠[/] No se detectaron redes WiFi
+
+[dim]Motivos posibles:[/]
+  • No hay redes WiFi en el área
+  • El adaptador WiFi no está en modo monitor
+  • Las redes están ocultas (SSID oculto)
+  • Fuera del alcance de redes WiFi
+
+[dim]Presiona 'r' para actualizar | 'q' para salir[/]"""
+                    table.add_row("-", "-", "[dim]Sin redes[/]", "-", "-", "-")
+                else:
+                    open_nets = sum(1 for n in networks if n['security'] == 'Abierta')
+                    secure_nets = total - open_nets
+                    
+                    # Detectar congestión de canales
+                    channels = {}
+                    for net in networks:
+                        ch = net['channel']
+                        channels[ch] = channels.get(ch, 0) + 1
+                    
+                    most_used = max(channels.items(), key=lambda x: x[1]) if channels else (None, 0)
+                    
+                    summary_text = f"""[bold cyan]═══ REDES WIFI DETECTADAS ═══[/]
 
 [green]●[/] Total de redes: [cyan]{total}[/]
   • Seguras: [green]{secure_nets}[/]

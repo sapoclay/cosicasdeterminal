@@ -99,6 +99,8 @@ class ConnectionsTable(DataTable):
 class NetworkMonitorApp(App):
     """Aplicación de monitoreo de red"""
     
+    TITLE = "📊 Monitor de Red"
+    
     CSS = """
     Screen {
         background: $surface;

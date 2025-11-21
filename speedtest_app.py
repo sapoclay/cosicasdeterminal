@@ -14,6 +14,8 @@ from datetime import datetime
 class SpeedtestApp(App):
     """Aplicación de test de velocidad de Internet"""
     
+    TITLE = "🚀 Test de Velocidad"
+    
     CSS = """
     Screen {
         background: $surface;

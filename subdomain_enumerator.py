@@ -13,6 +13,8 @@ import time
 class SubdomainEnumeratorApp(App):
     """Enumerador de subdominios"""
     
+    TITLE = "🔎 Enumerador de Subdominios"
+    
     CSS = """
     Screen {
         background: $surface;

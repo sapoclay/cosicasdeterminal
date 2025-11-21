@@ -8,6 +8,8 @@ from urllib.parse import urlparse
 class WebSecurityAnalyzerApp(App):
     """Analizador de seguridad de cabeceras HTTP"""
     
+    TITLE = "🔒 Analizador de Seguridad Web"
+    
     CSS = """
     Screen {
         background: $surface;

@@ -8,6 +8,8 @@ import json
 class GeoIPLocatorApp(App):
     """Aplicación para geolocalización de IPs"""
     
+    TITLE = "🌍 Localizador GeoIP"
+    
     CSS = """
     Screen {
         background: $surface;

@@ -15,6 +15,8 @@ from functools import partial
 class DNSAdvancedApp(App):
     """Aplicación de consultas DNS avanzadas"""
     
+    TITLE = "🌐 DNS Avanzado"
+    
     CSS = """
     Screen {
         background: $surface;

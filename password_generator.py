@@ -10,6 +10,8 @@ import secrets
 class PasswordGeneratorApp(App):
     """Generador y analizador de contraseñas seguras"""
     
+    TITLE = "🔐 Generador de Contraseñas"
+    
     CSS = """
     Screen {
         background: $surface;

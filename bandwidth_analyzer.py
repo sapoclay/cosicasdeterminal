@@ -15,6 +15,8 @@ from collections import defaultdict
 class BandwidthAnalyzerApp(App):
     """Aplicación de análisis de ancho de banda por proceso"""
     
+    TITLE = "📊 Ancho de Banda"
+    
     CSS = """
     Screen {
         background: $surface;

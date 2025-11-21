@@ -19,6 +19,8 @@ from platform_utils import (get_ping_command, get_traceroute_command,
 class NetworkToolsApp(App):
     """Aplicación de herramientas de diagnóstico de red"""
     
+    TITLE = "🛠️ Herramientas de Diagnóstico"
+    
     CSS = """
     Screen {
         background: $surface;
