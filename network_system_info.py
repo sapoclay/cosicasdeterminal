@@ -67,7 +67,7 @@ class NetworkSystemInfo(App):
         """Actualizar información"""
         self.refresh_info()
     
-    def get_dns_servers(self) -> list:
+    def get_dns_servers_local(self) -> list:
         """Obtener servidores DNS configurados"""
         return get_dns_servers()
     
@@ -155,7 +155,7 @@ class NetworkSystemInfo(App):
         
         # 3. Servidores DNS
         results.append("\n[bold cyan]═══ SERVIDORES DNS ═══[/]\n")
-        dns_servers = self.get_dns_servers()
+        dns_servers = self.get_dns_servers_local()
         for i, dns in enumerate(dns_servers, 1):
             results.append(f"[bold]{i}.[/] [cyan]{dns}[/]")
         
@@ -193,8 +193,11 @@ class NetworkSystemInfo(App):
         
         # 7. Puertos y servicios del firewall
         results.append("\n[bold cyan]═══ FIREWALL ═══[/]\n")
-        firewall_status = get_firewall_status()
-        results.append(firewall_status)
+        firewall_detected, firewall_status = get_firewall_status()
+        if firewall_detected:
+            results.append(f"[green]✓[/] {firewall_status}")
+        else:
+            results.append(f"[dim]{firewall_status}[/]")
         
         results.append("\n[dim]Pulsa 'r' para actualizar | 'q' para salir[/]")
         info_widget.update("\n".join(results))
