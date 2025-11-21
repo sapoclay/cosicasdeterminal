@@ -2,9 +2,9 @@
 
 <img width="1024" height="1024" alt="CosicasDeTerminal" src="https://github.com/user-attachments/assets/6718286a-5ba7-4896-a430-6d4928eb89e9" />
 
-Esta es una pequeña suite, que por el momento incluye 21 herramientas interactivas para diagnóstico de red y seguridad. Todo esto se ha desarrollado con [Textual](https://textual.textualize.io/) y Python.
+Esta es una pequeña suite, que por el momento incluye 24 herramientas interactivas para diagnóstico de red y seguridad. Todo esto se ha desarrollado con [Textual](https://textual.textualize.io/) y Python.
 
-**✨ Ahora compatible con Windows, Linux y macOS ✨**
+**✨ Compatible con Windows, Linux y a lo mejor con macOS**
 
 ## Inicio rápido
 
@@ -48,6 +48,11 @@ chmod +x start.sh
 20. **Ancho de banda** - Monitorea qué procesos usan la red
 21. **Enumerador de subdominios** - Descubre subdominios vía certificados y DNS
 
+### Diagnóstico y Privacidad
+22. **Verificador de fugas** - Detecta fugas DNS, IPv6, WebRTC y verifica VPN
+23. **Troubleshooter** - Diagnóstico automático de problemas con soluciones
+24. **Monitor de latencia geográfica** - Prueba latencia a regiones del mundo
+
 ## 🔧 Requisitos
 
 **Python:**
@@ -72,8 +77,6 @@ sudo apt-get install iputils-ping net-tools traceroute whois dnsutils
 # La mayoría de herramientas vienen preinstaladas
 brew install whois  # Si es necesario
 ```
-
-📖 Ver [WINDOWS_COMPATIBILITY.md](WINDOWS_COMPATIBILITY.md) para detalles completos de compatibilidad multiplataforma.
 
 ## 💻 Uso
 

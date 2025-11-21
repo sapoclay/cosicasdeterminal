@@ -63,6 +63,18 @@ class MainMenuScreen(Screen):
                             classes="description"
                         )
                 
+                # Diagnóstico y Privacidad
+                with Horizontal(classes="button-row"):
+                    with Vertical(classes="button-column"):
+                        yield Button("🔧 Diagnóstico y Privacidad", 
+                                   variant="error", 
+                                   classes="category-button",
+                                   id="cat-diagnostic")
+                        yield Static(
+                            "3 herramientas avanzadas para diagnóstico y verificación de privacidad",
+                            classes="description"
+                        )
+                
                 # Botones de sistema
                 with Horizontal(classes="button-row"):
                     with Vertical(classes="button-column"):
@@ -86,7 +98,7 @@ class MainMenuScreen(Screen):
                         )
                 
                 yield Static(
-                    "💡 21 herramientas profesionales de red y seguridad\n"
+                    "💡 24 herramientas profesionales de red y seguridad\n"
                     "Pulsa ESC para volver • Q para salir",
                     id="footer-info"
                 )
@@ -100,6 +112,8 @@ class MainMenuScreen(Screen):
             self.app.push_screen(AdvancedToolsScreen())
         elif event.button.id == "cat-security":
             self.app.push_screen(SecurityToolsScreen())
+        elif event.button.id == "cat-diagnostic":
+            self.app.push_screen(DiagnosticToolsScreen())
         elif event.button.id == "btn-about":
             self.app.push_screen(AboutScreen())
         elif event.button.id == "btn-quit":
@@ -311,6 +325,55 @@ class SecurityToolsScreen(Screen):
             "btn-websec": "web_security_analyzer.py",
             "btn-bandwidth": "bandwidth_analyzer.py",
             "btn-subdomain": "subdomain_enumerator.py",
+        }
+        
+        if event.button.id in actions:
+            self.app.suspend()
+            subprocess.run([sys.executable, actions[event.button.id]])
+            self.app.refresh()
+
+
+class DiagnosticToolsScreen(Screen):
+    """Pantalla de herramientas de diagnóstico y privacidad"""
+    
+    BINDINGS = [
+        Binding("escape", "app.pop_screen", "Volver"),
+        Binding("q", "app.pop_screen", "Volver"),
+    ]
+    
+    def compose(self) -> ComposeResult:
+        yield Header()
+        with VerticalScroll():
+            with Container(id="content"):
+                yield Static("🔧 DIAGNÓSTICO Y PRIVACIDAD", id="title")
+                yield Static("3 herramientas avanzadas de diagnóstico", id="subtitle")
+                
+                # Fila 1
+                with Horizontal(classes="button-row"):
+                    with Vertical(classes="button-column"):
+                        yield Button("🔒 Verificador de Fugas", variant="error", classes="app-button", id="btn-leak")
+                        yield Static("Detecta fugas DNS, IPv6, WebRTC y verifica VPN", classes="description")
+                    with Vertical(classes="button-column"):
+                        yield Button("🔧 Troubleshooter", variant="warning", classes="app-button", id="btn-troubleshoot")
+                        yield Static("Diagnóstico automático de problemas de red con soluciones", classes="description")
+                
+                # Fila 2
+                with Horizontal(classes="button-row"):
+                    with Vertical(classes="button-column"):
+                        yield Button("🌍 Latencia Geográfica", variant="primary", classes="app-button", id="btn-geolatency")
+                        yield Static("Prueba latencia a diferentes regiones del mundo", classes="description")
+                    with Vertical(classes="button-column"):
+                        pass
+                
+                yield Static("💡 Pulsa ESC para volver al menú principal", id="footer-info")
+        yield Footer()
+    
+    def on_button_pressed(self, event: Button.Pressed) -> None:
+        """Maneja los eventos de los botones"""
+        actions = {
+            "btn-leak": "leak_tester.py",
+            "btn-troubleshoot": "network_troubleshooter.py",
+            "btn-geolatency": "geo_latency_monitor.py",
         }
         
         if event.button.id in actions:

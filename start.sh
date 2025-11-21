@@ -50,6 +50,11 @@ show_menu() {
     echo " 19) 🌐 Analizador de seguridad Web"
     echo " 20) 🔍 Enumerador de subdominios"
     echo ""
+    echo -e "${CYAN}═══ Diagnóstico y Privacidad ═══${NC}"
+    echo " 21) 🔒 Verificador de fugas (DNS/IPv6/WebRTC)"
+    echo " 22) 🔧 Troubleshooter (diagnóstico automático)"
+    echo " 23) 🌍 Monitor de latencia geográfica"
+    echo ""
     echo -e "${CYAN}═══ Otros ═══${NC}"
     echo "  0) 🚀 Launcher (Menú GRÁFICO)"
     echo "  a) ℹ️  Acerca de ..."
@@ -89,6 +94,9 @@ show_about() {
     echo "  • Generador y analizador de contraseñas seguras"
     echo "  • Analizador de seguridad web (cabeceras HTTP)"
     echo "  • Enumerador de subdominios"
+    echo "  • Verificador de fugas (DNS/IPv6/WebRTC/VPN)"
+    echo "  • Troubleshooter con diagnóstico automático"
+    echo "  • Monitor de latencia geográfica global"
     echo ""
     echo -e "${BLUE}Tecnologías:${NC}"
     echo "  • Python 3.12+"
@@ -189,6 +197,18 @@ while true; do
         20)
             echo -e "${GREEN}Iniciando ENUMERADOR DE SUBDOMINIOS...${NC}"
             .venv/bin/python subdomain_enumerator.py
+            ;;
+        21)
+            echo -e "${GREEN}Iniciando VERIFICADOR DE FUGAS...${NC}"
+            .venv/bin/python leak_tester.py
+            ;;
+        22)
+            echo -e "${GREEN}Iniciando TROUBLESHOOTER...${NC}"
+            .venv/bin/python network_troubleshooter.py
+            ;;
+        23)
+            echo -e "${GREEN}Iniciando MONITOR DE LATENCIA GEOGRÁFICA...${NC}"
+            .venv/bin/python geo_latency_monitor.py
             ;;
         0)
             clear
