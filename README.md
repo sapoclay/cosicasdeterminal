@@ -1,5 +1,7 @@
 # 🌐 CosicasDeTerminal
 
+<img width="1024" height="1024" alt="CosicasDeTerminal" src="https://github.com/user-attachments/assets/6718286a-5ba7-4896-a430-6d4928eb89e9" />
+
 Esta es una pequeña suite, que por el momento incluye 21 herramientas interactivas para diagnóstico de red y seguridad. Todo esto se ha desarrollado con [Textual](https://textual.textualize.io/) y Python.
 
 **✨ Ahora compatible con Windows, Linux y macOS ✨**
