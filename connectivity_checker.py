@@ -87,15 +87,44 @@ class ConnectivityChecker(App):
         
         results = []
         
-        # 1. Verificar conexión básica a internet
+        # 1. Verificar conexión básica a internet (intentar múltiples métodos)
         results.append("[bold cyan]═══ CONECTIVIDAD A INTERNET ═══[/]\n")
+        internet_ok = False
+        
+        # Método 1: Intentar conexión a Google DNS
         try:
             socket.create_connection(("8.8.8.8", 53), timeout=3)
-            results.append("[bold green]✓[/] Conexión a internet: [green]ACTIVA[/]")
+            internet_ok = True
+            results.append("[green]✓[/] Conexión vía Google DNS (8.8.8.8:53): [green]OK[/]")
         except OSError:
-            results.append("[bold red]✗[/] Conexión a internet: [red]NO DISPONIBLE[/]")
-            output.update("\n".join(results))
-            return
+            results.append("[yellow]⚠[/] Google DNS (8.8.8.8:53): No responde")
+        
+        # Método 2: Intentar conexión HTTP a un sitio común
+        if not internet_ok:
+            try:
+                response = requests.get("https://www.google.com", timeout=5)
+                if response.status_code < 500:
+                    internet_ok = True
+                    results.append("[green]✓[/] Conexión vía HTTPS: [green]OK[/]")
+            except:
+                results.append("[yellow]⚠[/] Conexión HTTPS: No responde")
+        
+        # Método 3: Intentar resolución DNS
+        if not internet_ok:
+            try:
+                socket.gethostbyname("www.google.com")
+                internet_ok = True
+                results.append("[green]✓[/] Resolución DNS: [green]OK[/]")
+            except:
+                results.append("[yellow]⚠[/] Resolución DNS: Fallo")
+        
+        # Si ningún método funcionó, mostrar error y continuar con verificaciones
+        if not internet_ok:
+            results.append("\n[bold red]✗[/] No se pudo verificar conectividad a internet")
+            results.append("[yellow]Nota:[/] Algunos firewalls pueden bloquear estas verificaciones")
+            results.append("[dim]Continuando con otras verificaciones...[/]\n")
+        else:
+            results.append("\n[bold green]✓[/] Conexión a internet: [green]ACTIVA[/]\n")
         
         # 2. Verificar servidores DNS principales
         results.append("\n[bold cyan]═══ SERVIDORES DNS ═══[/]")

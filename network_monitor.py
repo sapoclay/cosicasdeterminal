@@ -208,10 +208,12 @@ class NetworkMonitorApp(App):
     
     def on_mount(self) -> None:
         """Se ejecuta cuando la aplicación se monta"""
+        # Actualizar inmediatamente al montar
+        self.call_after_refresh(self.update_all)
+        # Configurar actualizaciones periódicas
         self.set_interval(1, self.update_stats)
         self.set_interval(1, self.update_clock)
         self.set_interval(2, self.update_connections)
-        self.update_all()
     
     def update_clock(self) -> None:
         """Actualiza el reloj"""
@@ -231,27 +233,33 @@ class NetworkMonitorApp(App):
             net_io = psutil.net_io_counters()
             
             # Total enviado/recibido
-            stats = self.query(StatCard)
+            stats = list(self.query(StatCard))
             if len(stats) >= 4:
                 stats[0].set_value(self.format_bytes(net_io.bytes_sent))
                 stats[1].set_value(self.format_bytes(net_io.bytes_recv))
-            
-            # Número de conexiones
-            connections = psutil.net_connections()
-            if len(stats) >= 4:
-                stats[2].set_value(str(len(connections)))
-            
-            # Número de interfaces
-            interfaces = psutil.net_if_stats()
-            if len(stats) >= 4:
+                
+                # Número de conexiones
+                try:
+                    connections = psutil.net_connections()
+                    stats[2].set_value(str(len(connections)))
+                except:
+                    stats[2].set_value("N/A")
+                
+                # Número de interfaces
+                interfaces = psutil.net_if_stats()
                 stats[3].set_value(str(len(interfaces)))
             
             # Actualizar velocidad
-            speed_widget = self.query_one(NetworkSpeedWidget)
-            speed_widget.update_speed()
+            try:
+                speed_widgets = self.query(NetworkSpeedWidget)
+                if speed_widgets:
+                    speed_widgets[0].update_speed()
+            except:
+                pass
             
         except Exception as e:
-            self.notify(f"Error actualizando estadísticas: {e}", severity="error")
+            # Error silencioso para no molestar al usuario
+            pass
     
     def update_connections(self) -> None:
         """Actualiza la tabla de conexiones"""
@@ -259,7 +267,12 @@ class NetworkMonitorApp(App):
             return
         
         try:
-            table = self.query_one(ConnectionsTable)
+            # Verificar si existe la tabla antes de actualizar
+            tables = self.query(ConnectionsTable)
+            if not tables:
+                return  # No hay tabla que actualizar (puede estar mostrando estadísticas)
+            
+            table = tables[0]
             table.clear()
             
             connections = psutil.net_connections(kind='inet')
@@ -278,7 +291,8 @@ class NetworkMonitorApp(App):
                     pass
                     
         except Exception as e:
-            self.notify(f"Error actualizando conexiones: {e}", severity="error")
+            # No mostrar error si simplemente no existe la tabla
+            pass
     
     def update_all(self) -> None:
         """Actualiza todos los componentes"""
@@ -295,7 +309,25 @@ class NetworkMonitorApp(App):
             self.show_detailed_stats()
     
     def action_refresh(self) -> None:
-        """Refresca manualmente los datos"""
+        """Refresca manualmente los datos y restaura vista de conexiones"""
+        # Restaurar la vista de conexiones si está mostrando estadísticas
+        try:
+            conn_section = self.query_one("#connections-section", Vertical)
+            # Verificar si está mostrando estadísticas detalladas
+            detailed_stats = conn_section.query("#detailed-stats")
+            if detailed_stats:
+                # Limpiar y restaurar
+                for child in list(conn_section.children):
+                    child.remove()
+                
+                conn_section.mount(Static("[bold]🔗 CONEXIONES ACTIVAS[/]", id="conn-title"))
+                table = ConnectionsTable()
+                conn_section.mount(table)
+                # Forzar actualización de la tabla
+                self.call_after_refresh(self.update_connections)
+        except Exception as e:
+            pass
+        
         self.update_all()
         self.notify("Datos actualizados", severity="information")
     
@@ -315,22 +347,52 @@ class NetworkMonitorApp(App):
             pass
     
     def show_detailed_stats(self) -> None:
-        """Muestra estadísticas detalladas"""
+        """Muestra estadísticas detalladas en la sección de conexiones"""
         try:
             net_io = psutil.net_io_counters()
+            net_if = psutil.net_if_stats()
             
-            stats_text = f"📊 ESTADÍSTICAS DETALLADAS\n\n"
-            stats_text += f"Paquetes enviados: {net_io.packets_sent:,}\n"
-            stats_text += f"Paquetes recibidos: {net_io.packets_recv:,}\n"
-            stats_text += f"Errores de entrada: {net_io.errin:,}\n"
-            stats_text += f"Errores de salida: {net_io.errout:,}\n"
-            stats_text += f"Paquetes descartados (in): {net_io.dropin:,}\n"
-            stats_text += f"Paquetes descartados (out): {net_io.dropout:,}\n"
+            stats_text = "[bold cyan]═══ ESTADÍSTICAS DETALLADAS DE RED ═══[/]\n\n"
             
-            self.notify(stats_text, severity="information", timeout=10)
+            # Estadísticas de paquetes
+            stats_text += "[bold yellow]📦 PAQUETES:[/]\n"
+            stats_text += f"  • Enviados: [green]{net_io.packets_sent:,}[/]\n"
+            stats_text += f"  • Recibidos: [cyan]{net_io.packets_recv:,}[/]\n\n"
+            
+            # Errores
+            stats_text += "[bold red]⚠️  ERRORES:[/]\n"
+            stats_text += f"  • Entrada: [red]{net_io.errin:,}[/]\n"
+            stats_text += f"  • Salida: [red]{net_io.errout:,}[/]\n\n"
+            
+            # Paquetes descartados
+            stats_text += "[bold yellow]🗑️  DESCARTADOS:[/]\n"
+            stats_text += f"  • Entrada: [yellow]{net_io.dropin:,}[/]\n"
+            stats_text += f"  • Salida: [yellow]{net_io.dropout:,}[/]\n\n"
+            
+            # Interfaces de red
+            stats_text += "[bold cyan]📡 INTERFACES DE RED:[/]\n"
+            for iface_name, iface_stats in net_if.items():
+                status = "🟢" if iface_stats.isup else "🔴"
+                speed = f"{iface_stats.speed} Mbps" if iface_stats.speed > 0 else "N/A"
+                stats_text += f"  {status} [cyan]{iface_name}[/]: {speed}\n"
+            
+            stats_text += "\n[dim]Presiona 'r' para volver a las conexiones[/]"
+            
+            # Reemplazar la tabla de conexiones con las estadísticas
+            try:
+                conn_section = self.query_one("#connections-section", Vertical)
+                # Limpiar contenido actual de forma segura
+                for child in list(conn_section.children):
+                    child.remove()
+                # Agregar estadísticas
+                conn_section.mount(Static(stats_text, id="detailed-stats"))
+                self.notify("Mostrando estadísticas detalladas", severity="information")
+            except Exception as inner_e:
+                # Si falla, usar notificación como respaldo
+                self.notify(f"Error: {inner_e}", severity="error")
             
         except Exception as e:
-            self.notify(f"Error: {e}", severity="error")
+            self.notify(f"Error obteniendo estadísticas: {e}", severity="error")
     
     @staticmethod
     def format_bytes(bytes_value: float) -> str:
