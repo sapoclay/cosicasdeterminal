@@ -54,6 +54,7 @@ show_menu() {
     echo " 21) 🔒 Verificador de fugas (DNS/IPv6/WebRTC)"
     echo " 22) 🔧 Troubleshooter (diagnóstico automático)"
     echo " 23) 🌍 Monitor de latencia geográfica"
+    echo " 24) 📋 Visor de logs del sistema"
     echo ""
     echo -e "${CYAN}═══ Otros ═══${NC}"
     echo "  0) 🚀 Launcher (Menú GRÁFICO)"
@@ -97,6 +98,8 @@ show_about() {
     echo "  • Verificador de fugas (DNS/IPv6/WebRTC/VPN)"
     echo "  • Troubleshooter con diagnóstico automático"
     echo "  • Monitor de latencia geográfica global"
+    echo "  • Monitor de latencia geográfica global"
+    echo "  • Visor de logs (CLI/TUI cross-platform)"
     echo ""
     echo -e "${BLUE}Tecnologías:${NC}"
     echo "  • Python 3.12+"
@@ -209,6 +212,10 @@ while true; do
         23)
             echo -e "${GREEN}Iniciando MONITOR DE LATENCIA GEOGRÁFICA...${NC}"
             .venv/bin/python geo_latency_monitor.py
+            ;;
+        24)
+            echo -e "${GREEN}Iniciando VISOR DE LOGS...${NC}"
+            .venv/bin/python log_viewer.py
             ;;
         0)
             clear

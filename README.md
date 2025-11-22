@@ -2,7 +2,7 @@
 
 <img width="1024" height="1024" alt="CosicasDeTerminal" src="https://github.com/user-attachments/assets/6718286a-5ba7-4896-a430-6d4928eb89e9" />
 
-Esta es una pequeña suite, que por el momento incluye 24 herramientas interactivas para diagnóstico de red y seguridad. Todo esto se ha desarrollado con [Textual](https://textual.textualize.io/) y Python.
+Esta es una pequeña suite, que por el momento incluye 25 herramientas interactivas para diagnóstico de red y seguridad. Todo esto se ha desarrollado con [Textual](https://textual.textualize.io/) y Python.
 
 **✨ Compatible con Windows, Linux y a lo mejor con macOS**
 
@@ -52,6 +52,7 @@ chmod +x start.sh
 22. **Verificador de fugas** - Detecta fugas DNS, IPv6, WebRTC y verifica VPN
 23. **Troubleshooter** - Diagnóstico automático de problemas con soluciones
 24. **Monitor de latencia geográfica** - Prueba latencia a regiones del mundo
+25. **Visor de logs** - Visualiza logs en terminal (compatible con SSH/Windows/Linux)
 
 ## 🔧 Requisitos
 

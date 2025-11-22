@@ -71,7 +71,7 @@ class MainMenuScreen(Screen):
                                    classes="category-button",
                                    id="cat-diagnostic")
                         yield Static(
-                            "3 herramientas avanzadas para diagnóstico y verificación de privacidad",
+                            "4 herramientas avanzadas para diagnóstico y verificación de privacidad",
                             classes="description"
                         )
                 
@@ -98,7 +98,7 @@ class MainMenuScreen(Screen):
                         )
                 
                 yield Static(
-                    "💡 24 herramientas profesionales de red y seguridad\n"
+                    "💡 25 herramientas profesionales de red y seguridad\n"
                     "Pulsa ESC para volver • Q para salir",
                     id="footer-info"
                 )
@@ -346,7 +346,7 @@ class DiagnosticToolsScreen(Screen):
         with VerticalScroll():
             with Container(id="content"):
                 yield Static("🔧 DIAGNÓSTICO Y PRIVACIDAD", id="title")
-                yield Static("3 herramientas avanzadas de diagnóstico", id="subtitle")
+                yield Static("4 herramientas avanzadas de diagnóstico", id="subtitle")
                 
                 # Fila 1
                 with Horizontal(classes="button-row"):
@@ -363,7 +363,8 @@ class DiagnosticToolsScreen(Screen):
                         yield Button("🌍 Latencia Geográfica", variant="primary", classes="app-button", id="btn-geolatency")
                         yield Static("Prueba latencia a diferentes regiones del mundo", classes="description")
                     with Vertical(classes="button-column"):
-                        pass
+                        yield Button("📋 Visor de Logs", variant="success", classes="app-button", id="btn-logviewer")
+                        yield Static("Explora y busca archivos de logs del sistema", classes="description")
                 
                 yield Static("💡 Pulsa ESC para volver al menú principal", id="footer-info")
         yield Footer()
@@ -374,6 +375,7 @@ class DiagnosticToolsScreen(Screen):
             "btn-leak": "leak_tester.py",
             "btn-troubleshoot": "network_troubleshooter.py",
             "btn-geolatency": "geo_latency_monitor.py",
+            "btn-logviewer": "log_viewer.py",
         }
         
         if event.button.id in actions:

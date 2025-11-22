@@ -89,11 +89,15 @@ class AboutScreen(Screen):
   • Generador de contraseñas seguras
   • Analizador de seguridad web
   • Enumerador de subdominios
+  
+  [cyan]Diagnóstico y Privacidad:[/]
   • Verificador de fugas (DNS/IPv6/WebRTC/VPN)
   • Troubleshooter (diagnóstico automático)
   • Monitor de latencia geográfica
+  • Monitor de latencia geográfica
+  • Visor de logs (Soporte CLI/SSH/Cross-platform)
   
-[bold yellow]24 herramientas profesionales en una suite[/]
+[bold yellow]25 herramientas profesionales en una suite[/]
 
 [bold blue]Tecnologías:[/]
   • Python 3.12+
