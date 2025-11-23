@@ -1,5 +1,6 @@
 """
-Calcula rangos IP, máscaras y divide redes en subredes
+Calculadora Universal de Subredes (IPv4 / IPv6)
+Calcula rangos, máscaras, formatos y divide redes
 """
 
 from textual.app import App, ComposeResult
@@ -7,12 +8,12 @@ from textual.containers import Container, Horizontal, Vertical, ScrollableContai
 from textual.widgets import Header, Footer, Button, Static, Input, Label
 from textual.binding import Binding
 import ipaddress
-
+import math
 
 class SubnetCalculatorApp(App):
-    """Aplicación de calculadora de subredes"""
+    """Aplicación de calculadora de subredes universal"""
     
-    TITLE = "🧮 Calculadora de Subredes"
+    TITLE = "🧮 Calculadora IP Universal"
     
     CSS = """
     Screen {
@@ -52,7 +53,7 @@ class SubnetCalculatorApp(App):
     }
     
     .input-label {
-        width: 20;
+        width: 25;
         content-align: left middle;
     }
     
@@ -78,12 +79,11 @@ class SubnetCalculatorApp(App):
     ]
     
     def compose(self) -> ComposeResult:
-        """Compone la interfaz de usuario"""
         yield Header()
         
         with ScrollableContainer(id="main-container"):
             with Vertical(id="title-section"):
-                yield Static("🔢 CALCULADORA DE SUBREDES", classes="title")
+                yield Static("🔢 CALCULADORA IP UNIVERSAL (v4/v6)", classes="title")
             
             # Sección de entrada
             with Vertical(classes="section"):
@@ -91,11 +91,11 @@ class SubnetCalculatorApp(App):
                 
                 with Horizontal(classes="input-group"):
                     yield Label("Dirección IP:", classes="input-label")
-                    yield Input(placeholder="Ej: 192.168.1.0", id="ip-input")
+                    yield Input(placeholder="Ej: 192.168.1.0 o 2001:db8::1", id="ip-input")
                 
                 with Horizontal(classes="input-group"):
-                    yield Label("Máscara (CIDR o decimal):", classes="input-label")
-                    yield Input(placeholder="Ej: 24 o 255.255.255.0", id="mask-input")
+                    yield Label("Prefijo/Máscara:", classes="input-label")
+                    yield Input(placeholder="Ej: 24, 255.255.255.0 o 64", id="mask-input")
                 
                 with Horizontal(classes="input-group"):
                     yield Button("🔍 Calcular", variant="primary", id="calc-btn")
@@ -104,7 +104,7 @@ class SubnetCalculatorApp(App):
             # Sección de resultados - Información básica
             with Vertical(classes="section"):
                 yield Static("📊 Información de red", classes="section-title")
-                yield Static("Escribe una dirección IP y máscara para ver los resultados", 
+                yield Static("Escribe una dirección IP para ver los resultados", 
                            id="basic-results", classes="result-box")
             
             # Sección de división de subredes
@@ -120,15 +120,14 @@ class SubnetCalculatorApp(App):
                 
                 yield Static("", id="subnets-results", classes="result-box")
             
-            # Conversión de máscaras
+            # Conversión y Formatos
             with Vertical(classes="section"):
-                yield Static("🔄 Conversión de máscaras", classes="section-title")
-                yield Static("", id="mask-conversion", classes="result-box")
+                yield Static("🔄 Formatos y Conversiones", classes="section-title")
+                yield Static("", id="formats", classes="result-box")
         
         yield Footer()
     
     def on_button_pressed(self, event: Button.Pressed) -> None:
-        """Maneja eventos de botones"""
         if event.button.id == "calc-btn":
             self.calculate_network()
         elif event.button.id == "clear-btn":
@@ -136,172 +135,161 @@ class SubnetCalculatorApp(App):
         elif event.button.id == "divide-btn":
             self.divide_subnets()
     
-    def action_calculate(self) -> None:
-        """Acción de teclado para calcular"""
-        self.calculate_network()
-    
     def calculate_network(self) -> None:
-        """Calcula la información de la red"""
         try:
-            ip_input = self.query_one("#ip-input", Input).value
-            mask_input = self.query_one("#mask-input", Input).value
+            ip_input = self.query_one("#ip-input", Input).value.strip()
+            mask_input = self.query_one("#mask-input", Input).value.strip()
             
-            if not ip_input or not mask_input:
-                self.notify("Por favor escribe la IP y máscara", severity="warning")
+            if not ip_input:
+                self.notify("Por favor escribe la IP", severity="warning")
                 return
             
-            # Procesar máscara
-            if mask_input.count('.') == 3:
-                # Es una máscara decimal, convertir a CIDR
+            # Auto-detect default prefix if empty
+            if not mask_input:
+                if ':' in ip_input: mask_input = "64"
+                else: mask_input = "24"
+            
+            # Procesar máscara IPv4 si es decimal
+            if '.' in mask_input and ':' not in mask_input and mask_input.count('.') == 3:
                 mask_obj = ipaddress.IPv4Address(mask_input)
                 cidr = bin(int(mask_obj)).count('1')
-            else:
-                cidr = int(mask_input)
+                mask_input = str(cidr)
             
-            # Crear objeto de red
-            network = ipaddress.IPv4Network(f"{ip_input}/{cidr}", strict=False)
-            
-            # Calcular información
-            num_hosts = network.num_addresses - 2  # Excluir red y broadcast
-            if num_hosts < 0:
-                num_hosts = 0
+            # Crear objeto de red (Universal)
+            network = ipaddress.ip_network(f"{ip_input}/{mask_input}", strict=False)
+            ip_obj = ipaddress.ip_address(ip_input)
+            version = network.version
             
             # Construir resultado
-            result = f"[bold cyan]📡 Información de Red[/]\n\n"
-            result += f"Dirección de Red:    [yellow]{network.network_address}[/]\n"
-            result += f"Primera IP utilizable: [green]{network.network_address + 1}[/]\n"
-            result += f"Última IP utilizable:  [green]{network.network_address + network.num_addresses - 2}[/]\n"
-            result += f"Dirección Broadcast:  [red]{network.broadcast_address}[/]\n"
-            result += f"Máscara de Red:      [cyan]{network.netmask}[/]\n"
-            result += f"Máscara Wildcard:    [cyan]{network.hostmask}[/]\n"
-            result += f"CIDR:               /{cidr}\n"
-            result += f"Total de IPs:       {network.num_addresses}\n"
-            result += f"IPs Utilizables:    {num_hosts}\n"
-            result += f"Clase:              {self.get_ip_class(network.network_address)}\n"
+            result = f"[bold cyan]📡 Información de Red (IPv{version})[/]\n\n"
+            result += f"Dirección IP:       [yellow]{ip_obj}[/]\n"
+            result += f"Red (Prefijo):      [green]{network.network_address}[/]\n"
             
-            # Si es privada
-            if network.is_private:
-                result += f"Tipo:               [green]Red Privada[/]\n"
+            if version == 4:
+                num_hosts = network.num_addresses - 2
+                if num_hosts < 0: num_hosts = 0
+                result += f"Primera IP:         [green]{network.network_address + 1}[/]\n"
+                result += f"Última IP:          [green]{network.network_address + network.num_addresses - 2}[/]\n"
+                result += f"Broadcast:          [red]{network.broadcast_address}[/]\n"
+                result += f"Máscara:            [cyan]{network.netmask}[/]\n"
+                result += f"Wildcard:           [cyan]{network.hostmask}[/]\n"
             else:
-                result += f"Tipo:               [yellow]Red Pública[/]\n"
+                result += f"Primera IP:         {network.network_address}\n"
+                result += f"Última IP:          {network.broadcast_address}\n"
+            
+            result += f"CIDR:               /{network.prefixlen}\n"
+            result += f"Total IPs:          {network.num_addresses}\n"
+            
+            # Tipos
+            types = []
+            if ip_obj.is_private: types.append("Privada")
+            if ip_obj.is_global: types.append("Global")
+            if ip_obj.is_multicast: types.append("Multicast")
+            if ip_obj.is_loopback: types.append("Loopback")
+            if ip_obj.is_link_local: types.append("Link-Local")
+            result += f"Tipo:               [magenta]{', '.join(types) or 'Unicast'}[/]\n"
             
             self.query_one("#basic-results", Static).update(result)
             
-            # Actualizar conversión de máscaras
-            self.update_mask_conversion(network)
-            
-            self.notify("Cálculo completado", severity="information")
+            # Actualizar formatos
+            self.update_formats(ip_obj, network)
+            self.notify("Cálculo completado")
             
         except ValueError as e:
             self.notify(f"Error: {str(e)}", severity="error")
-            self.query_one("#basic-results", Static).update(
-                f"[red]Error: Dirección IP o máscara inválida[/]\n{str(e)}"
-            )
-    
-    def get_ip_class(self, ip: ipaddress.IPv4Address) -> str:
-        """Determina la clase de una dirección IP"""
-        first_octet = int(str(ip).split('.')[0])
-        if first_octet < 128:
-            return "A (0-127)"
-        elif first_octet < 192:
-            return "B (128-191)"
-        elif first_octet < 224:
-            return "C (192-223)"
-        elif first_octet < 240:
-            return "D (224-239) - Multicast"
-        else:
-            return "E (240-255) - Experimental"
-    
-    def update_mask_conversion(self, network: ipaddress.IPv4Network) -> None:
-        """Actualiza la sección de conversión de máscaras"""
-        result = f"[bold cyan]🔄 Conversiones[/]\n\n"
-        result += f"Notación CIDR:       /{network.prefixlen}\n"
-        result += f"Máscara decimal:     {network.netmask}\n"
-        result += f"Máscara hexadecimal: {hex(int(network.netmask))}\n"
-        result += f"Máscara binaria:     {bin(int(network.netmask))[2:].zfill(32)}\n"
-        result += f"Wildcard decimal:    {network.hostmask}\n"
-        result += f"Bits de red:         {network.prefixlen}\n"
-        result += f"Bits de host:        {32 - network.prefixlen}\n"
+            self.query_one("#basic-results", Static).update(f"[red]Error:[/]\n{str(e)}")
+
+    def update_formats(self, ip_obj, network):
+        fmt = f"[bold cyan]🔄 Representaciones[/]\n\n"
         
-        self.query_one("#mask-conversion", Static).update(result)
-    
+        if network.version == 6:
+            fmt += f"Comprimida:         {ip_obj.compressed}\n"
+            fmt += f"Expandida:          {ip_obj.exploded}\n"
+            fmt += f"Hexadecimal:        {hex(int(ip_obj))}\n"
+        else:
+            fmt += f"Binario:            {bin(int(ip_obj))[2:].zfill(32)}\n"
+            fmt += f"Hexadecimal:        {hex(int(ip_obj))}\n"
+            fmt += f"Integer:            {int(ip_obj)}\n"
+            
+        fmt += f"\n[bold cyan]🔍 Reverse DNS[/]\n"
+        fmt += f"PTR:                {ip_obj.reverse_pointer}\n"
+        
+        self.query_one("#formats", Static).update(fmt)
+
     def divide_subnets(self) -> None:
-        """Divide la red en subredes"""
         try:
-            ip_input = self.query_one("#ip-input", Input).value
-            mask_input = self.query_one("#mask-input", Input).value
-            subnets_input = self.query_one("#subnets-input", Input).value
+            ip_input = self.query_one("#ip-input", Input).value.strip()
+            mask_input = self.query_one("#mask-input", Input).value.strip()
+            subnets_input = self.query_one("#subnets-input", Input).value.strip()
             
-            if not ip_input or not mask_input or not subnets_input:
-                self.notify("Por favor completa todos los campos", severity="warning")
+            if not ip_input or not subnets_input:
+                self.notify("Faltan datos", severity="warning")
                 return
+                
+            # Auto-detect mask
+            if not mask_input:
+                if ':' in ip_input: mask_input = "64"
+                else: mask_input = "24"
             
-            num_subnets = int(subnets_input)
-            if num_subnets < 2:
-                self.notify("Debe haber al menos 2 subredes", severity="warning")
-                return
-            
-            # Procesar máscara
-            if mask_input.count('.') == 3:
+            # Fix IPv4 mask
+            if '.' in mask_input and ':' not in mask_input and mask_input.count('.') == 3:
                 mask_obj = ipaddress.IPv4Address(mask_input)
-                cidr = bin(int(mask_obj)).count('1')
-            else:
-                cidr = int(mask_input)
+                mask_input = str(bin(int(mask_obj)).count('1'))
+
+            network = ipaddress.ip_network(f"{ip_input}/{mask_input}", strict=False)
+            num_subnets = int(subnets_input)
             
-            network = ipaddress.IPv4Network(f"{ip_input}/{cidr}", strict=False)
-            
-            # Calcular nuevo prefixlen
-            import math
+            if num_subnets < 2:
+                self.notify("Mínimo 2 subredes", severity="warning")
+                return
+
+            # Calculate bits needed
             bits_needed = math.ceil(math.log2(num_subnets))
             new_prefixlen = network.prefixlen + bits_needed
+            max_bits = 128 if network.version == 6 else 32
             
-            if new_prefixlen > 32:
-                self.notify("No se puede dividir en tantas subredes", severity="error")
+            if new_prefixlen > max_bits:
+                self.notify(f"Imposible dividir: /{new_prefixlen} excede /{max_bits}", severity="error")
                 return
             
-            # Obtener subredes
             subnets = list(network.subnets(prefixlen_diff=bits_needed))
             
-            # Construir resultado
-            result = f"[bold cyan]✂️ División en {len(subnets)} Subredes[/]\n"
-            result += f"Nueva máscara: /{new_prefixlen} ({ipaddress.IPv4Network(f'0.0.0.0/{new_prefixlen}').netmask})\n\n"
+            result = f"[bold cyan]✂️ División en {len(subnets)} Subredes (IPv{network.version})[/]\n"
+            result += f"Nueva máscara: /{new_prefixlen}\n\n"
             
-            for i, subnet in enumerate(subnets[:num_subnets], 1):
-                hosts = subnet.num_addresses - 2
-                if hosts < 0:
-                    hosts = 0
+            limit = 50 # Limit output to avoid UI lag
+            for i, subnet in enumerate(subnets[:limit], 1):
                 result += f"[yellow]Subred {i}:[/]\n"
                 result += f"  Red: {subnet.network_address}/{new_prefixlen}\n"
-                result += f"  Rango: {subnet.network_address + 1} - {subnet.broadcast_address - 1}\n"
-                result += f"  Broadcast: {subnet.broadcast_address}\n"
-                result += f"  Hosts: {hosts}\n\n"
-            
+                if network.version == 4:
+                    result += f"  Rango: {subnet.network_address + 1} - {subnet.broadcast_address - 1}\n"
+                    result += f"  Broadcast: {subnet.broadcast_address}\n"
+                else:
+                    result += f"  Inicio: {subnet.network_address}\n"
+                    result += f"  Fin: {subnet.broadcast_address}\n"
+                result += "\n"
+                
+            if len(subnets) > limit:
+                result += f"[red]... y {len(subnets) - limit} subredes más (ocultas)[/]"
+                
             self.query_one("#subnets-results", Static).update(result)
-            self.notify(f"Red dividida en {len(subnets)} subredes", severity="information")
+            self.notify(f"Dividido en {len(subnets)} subredes")
             
-        except ValueError as e:
-            self.notify(f"Error: {str(e)}", severity="error")
         except Exception as e:
-            self.notify(f"Error al dividir: {str(e)}", severity="error")
-    
-    def clear_all(self) -> None:
-        """Limpia todos los campos"""
+            self.notify(f"Error: {e}", severity="error")
+
+    def clear_all(self):
         self.query_one("#ip-input", Input).value = ""
         self.query_one("#mask-input", Input).value = ""
         self.query_one("#subnets-input", Input).value = ""
-        self.query_one("#basic-results", Static).update(
-            "Escribe una dirección IP y máscara para ver los resultados"
-        )
+        self.query_one("#basic-results", Static).update("Esperando datos...")
         self.query_one("#subnets-results", Static).update("")
-        self.query_one("#mask-conversion", Static).update("")
-        self.notify("Campos limpiados", severity="information")
-
+        self.query_one("#formats", Static).update("")
+        self.notify("Campos limpiados")
 
 def main():
-    """Función principal"""
     app = SubnetCalculatorApp()
     app.run()
-
 
 if __name__ == "__main__":
     main()

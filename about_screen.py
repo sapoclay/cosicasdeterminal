@@ -79,14 +79,16 @@ class AboutScreen(Screen):
   • Info completa del sistema de red
   
   [cyan]Herramientas Avanzadas:[/]
-  • Calculadora de subredes y DNS avanzado
+  • Calculadora IP Universal (IPv4/IPv6)
   • Verificador SSL/TLS y test de velocidad
   • Detector de cambios en la red
-  • Localizador GeoIP e inspector HTTP
+  • Localizador GeoIP para IPs y dominios
+  • Inspector HTTP/API para pruebas de endpoints
+  • Analizador de Paquetes (Sniffer) en tiempo real
+  • Analizador de vulnerabilidades de puertos
+  • Generador y analizador de contraseñas seguras
   
   [cyan]Seguridad:[/]
-  • Escáner de vulnerabilidades
-  • Generador de contraseñas seguras
   • Analizador de seguridad web
   • Enumerador de subdominios
   
@@ -98,7 +100,7 @@ class AboutScreen(Screen):
   • Visor de logs (Soporte CLI/SSH/Cross-platform)
   • Wake on LAN y Gestor Conexiones (SSH/FTP)
   
-[bold yellow]27 herramientas profesionales en una suite[/]
+[bold yellow]28 herramientas profesionales en una suite[/]
 
 [bold blue]Tecnologías:[/]
   • Python 3.12+

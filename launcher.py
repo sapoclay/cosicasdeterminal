@@ -215,13 +215,13 @@ class AdvancedToolsScreen(Screen):
         with VerticalScroll():
             with Container(id="content"):
                 yield Static("⚙️ HERRAMIENTAS AVANZADAS", id="title")
-                yield Static("7 herramientas especializadas", id="subtitle")
+                yield Static("8 herramientas especializadas", id="subtitle")
                 
                 # Fila 1
                 with Horizontal(classes="button-row"):
                     with Vertical(classes="button-column"):
-                        yield Button("🔢 Calculadora subredes", variant="primary", classes="app-button", id="btn-subnet")
-                        yield Static("Calcula rangos IP, máscaras y divide redes en subredes", classes="description")
+                        yield Button("🔢 Calc. IP Universal", variant="primary", classes="app-button", id="btn-subnet")
+                        yield Static("Calcula IPv4/IPv6, subredes, rangos y formatos", classes="description")
                     with Vertical(classes="button-column"):
                         yield Button("🔍 DNS avanzado", variant="success", classes="app-button", id="btn-dns")
                         yield Static("Consulta múltiples tipos de registros DNS y compara servidores", classes="description")
@@ -248,7 +248,15 @@ class AdvancedToolsScreen(Screen):
                 with Horizontal(classes="button-row"):
                     with Vertical(classes="button-column"):
                         yield Button("🕵️ Inspector HTTP", variant="success", classes="app-button", id="btn-http")
-                        yield Static("Prueba APIs y analiza cabeceras HTTP/HTTPS", classes="description")
+                        yield Static("Analiza cabeceras, respuestas y tiempos de peticiones HTTP", classes="description")
+                    with Vertical(classes="button-column"):
+                        yield Button("🦈 Sniffer Paquetes", variant="error", classes="app-button", id="btn-sniffer")
+                        yield Static("Captura y analiza tráfico de red en tiempo real [ROOT]", classes="description")
+                        
+                # Fila 5
+                with Horizontal(classes="button-row"):
+                    with Vertical(classes="button-column"):
+                        pass
                     with Vertical(classes="button-column"):
                         pass
                 
@@ -265,6 +273,7 @@ class AdvancedToolsScreen(Screen):
             "btn-detector": "network_change_detector.py",
             "btn-geoip": "geoip_locator.py",
             "btn-http": "http_inspector.py",
+            "btn-sniffer": "packet_sniffer.py",
         }
         
         if event.button.id in actions:

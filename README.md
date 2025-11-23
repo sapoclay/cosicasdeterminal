@@ -37,19 +37,16 @@ python3 start.py
 9. **Info del sistema de red** - Configuración completa del sistema de red
 
 ### Herramientas avanzadas
-10. **Calculadora de subredes** - CIDR, máscaras, división de redes
-11. **DNS avanzado** - Consulta registros A, AAAA, MX, TXT, NS, SOA, PTR
-12. **Verificador SSL/TLS** - Valida certificados y cadenas de confianza
-13. **Test de velocidad** - Speedtest con historial
-14. **Detector de cambios** - Alertas cuando dispositivos se conectan/desconectan
-15. **Localizador GEOIP** - Geolocalización de IPs y dominios
-16. **Inspector HTTP** - Prueba APIs y analiza headers HTTP/HTTPS
+10. **Calculadora IP Universal** - IPv4/IPv6, CIDR, rangos, división y formatos
+11. **DNS avanzado** - Consultas A, AAAA, MX, NS, SOA, TXT y Reverse DNS
+12. **Verificador SSL/TLS** - Análisis de certificados, caducidad y seguridad
+13. **Test de velocidad** - Mide velocidad de bajada, subida y ping
+14. **Detector de cambios** - Monitoriza la red y avisa de nuevos dispositivos
+15. **Localizador GeoIP** - Geolocalización de IPs y dominios en mapa
+16. **Inspector HTTP** - Analiza cabeceras, métodos y respuestas de APIs
+17. **Analizador de Paquetes** - Sniffer de tráfico en tiempo real (requiere root) HTTP/HTTPS
 
 ### Seguridad
-17. **Escáner de vulnerabilidades** - Detecta puertos y configuraciones inseguras
-18. **Generador de contraseñas** - Genera y analiza contraseñas seguras
-19. **Analizador de seguridad web** - Evalúa headers de seguridad (HSTS, CSP, etc.)
-20. **Ancho de banda** - Monitorea qué procesos usan la red
 21. **Enumerador de subdominios** - Descubre subdominios vía certificados y DNS
 
 ### Diagnóstico y Privacidad

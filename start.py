@@ -82,29 +82,30 @@ def show_menu():
     print()
     
     print(f"{Colors.CYAN}═══ Herramientas avanzadas ═══{Colors.NC}")
-    print(" 10) 🔢 Calculadora de subredes")
+    print(" 10) 🔢 Calculadora IP Universal (v4/v6)")
     print(" 11) 🔍 DNS avanzado")
     print(" 12) 🔒 Verificador de SSL/TLS")
     print(" 13) 🚀 Test de velocidad (speedtest)")
     print(" 14) 🔍 Detector de cambios en RED")
     print(" 15) 🌍 Localizador GEOIP")
     print(" 16) 🕵️  Inspector HTTP/API")
+    print(" 17) 🦈 Analizador de Paquetes (Sniffer) [ROOT]")
     print()
     
     print(f"{Colors.CYAN}═══ Herramientas de seguridad ═══{Colors.NC}")
-    print(" 17) 🛡️  Analizador de vulnerabilidades")
-    print(" 18) 🔑 Generador de contraseñas")
-    print(" 19) 🌐 Analizador de seguridad Web")
-    print(" 20) 🔍 Enumerador de subdominios")
+    print(" 18) 🛡️  Analizador de vulnerabilidades")
+    print(" 19) 🔑 Generador de contraseñas")
+    print(" 20) 🌐 Analizador de seguridad Web")
+    print(" 21) 🔍 Enumerador de subdominios")
     print()
     
     print(f"{Colors.CYAN}═══ Diagnóstico y Privacidad ═══{Colors.NC}")
-    print(" 21) 🔒 Verificador de fugas (DNS/IPv6/WebRTC)")
-    print(" 22) 🔧 Troubleshooter (diagnóstico automático)")
-    print(" 23) 🌍 Monitor de latencia geográfica")
-    print(" 24) 📋 Visor de logs del sistema")
-    print(" 25) ⏰ Wake on LAN (WoL)")
-    print(" 26) 🔑 Gestor de Conexiones (SSH/FTP/SFTP)")
+    print(" 22) 🔒 Verificador de fugas (DNS/IPv6/WebRTC)")
+    print(" 23) 🔧 Troubleshooter (diagnóstico automático)")
+    print(" 24) 🌍 Monitor de latencia geográfica")
+    print(" 25) 📋 Visor de logs del sistema")
+    print(" 26) ⏰ Wake on LAN (WoL)")
+    print(" 27) 🔑 Gestor de Conexiones (SSH/FTP/SFTP)")
     print()
     
     print(f"{Colors.CYAN}═══ Otros ═══{Colors.NC}")
@@ -194,16 +195,17 @@ def main():
         "14": ("network_change_detector.py", "DETECTOR DE CAMBIOS EN RED"),
         "15": ("geoip_locator.py", "LOCALIZADOR GEOIP"),
         "16": ("http_inspector.py", "INSPECTOR HTTP"),
-        "17": ("vuln_port_scanner.py", "ANALIZADOR DE VULNERABILIDADES"),
-        "18": ("password_generator.py", "GENERADOR DE CONTRASEÑAS"),
-        "19": ("web_security_analyzer.py", "ANALIZADOR DE SEGURIDAD WEB"),
-        "20": ("subdomain_enumerator.py", "ENUMERADOR DE SUBDOMINIOS"),
-        "21": ("leak_tester.py", "VERIFICADOR DE FUGAS"),
-        "22": ("network_troubleshooter.py", "TROUBLESHOOTER"),
-        "23": ("geo_latency_monitor.py", "MONITOR DE LATENCIA GEOGRÁFICA"),
-        "24": ("log_viewer.py", "VISOR DE LOGS"),
-        "25": ("wake_on_lan.py", "WAKE ON LAN"),
-        "26": ("connection_manager.py", "GESTOR DE CONEXIONES"),
+        "17": ("packet_sniffer.py", "ANALIZADOR DE PAQUETES"),
+        "18": ("vuln_port_scanner.py", "ANALIZADOR DE VULNERABILIDADES"),
+        "19": ("password_generator.py", "GENERADOR DE CONTRASEÑAS"),
+        "20": ("web_security_analyzer.py", "ANALIZADOR DE SEGURIDAD WEB"),
+        "21": ("subdomain_enumerator.py", "ENUMERADOR DE SUBDOMINIOS"),
+        "22": ("leak_tester.py", "VERIFICADOR DE FUGAS"),
+        "23": ("network_troubleshooter.py", "TROUBLESHOOTER"),
+        "24": ("geo_latency_monitor.py", "MONITOR DE LATENCIA GEOGRÁFICA"),
+        "25": ("log_viewer.py", "VISOR DE LOGS"),
+        "26": ("wake_on_lan.py", "WAKE ON LAN"),
+        "27": ("connection_manager.py", "GESTOR DE CONEXIONES"),
         "0": ("launcher.py", "Launcher Gráfico")
     }
 
