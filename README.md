@@ -13,10 +13,14 @@ Esta es una pequeña suite, que por el momento incluye 25 herramientas interacti
 python3 -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
+```
 
-# Ejecutar
-chmod +x start.sh
-./start.sh
+### 🚀 Inicio Rápido (Multiplataforma)
+
+La forma recomendada de iniciar la aplicación en **Linux, Windows y macOS** es:
+
+```bash
+python3 start.py
 ```
 
 ## 📦 Herramientas incluidas 📦
@@ -53,6 +57,8 @@ chmod +x start.sh
 23. **Troubleshooter** - Diagnóstico automático de problemas con soluciones
 24. **Monitor de latencia geográfica** - Prueba latencia a regiones del mundo
 25. **Visor de logs** - Visualiza logs en terminal (compatible con SSH/Windows/Linux)
+26. **Wake on LAN** - Enciende equipos remotamente mediante paquetes mágicos
+27. **Gestor de Conexiones** - Gestiona conexiones SSH, FTP y SFTP rápidamente
 
 ## 🔧 Requisitos
 
@@ -82,8 +88,8 @@ brew install whois  # Si es necesario
 ## 💻 Uso
 
 ```bash
-./start.sh              # Menú CLI
-python launcher.py      # Menú gráfico (recomendado)
+python3 start.py              # Menú CLI
+python3 launcher.py      # Menú gráfico (recomendado)
 ```
 
 ## ⚡ Atajos

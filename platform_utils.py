@@ -1,5 +1,4 @@
 """
-Utilidades multiplataforma para CosicasDeTerminal
 Maneja las diferencias entre Linux, Windows y macOS
 """
 

@@ -1,6 +1,6 @@
 """
 Verificador de fugas de privacidad (DNS, WebRTC, IPv6)
-Detecta si tu VPN o configuración tiene fugas de información
+Detecta si la VPN o configuración tiene fugas de información
 """
 from textual.app import App, ComposeResult
 from textual.containers import Container, Vertical, Horizontal, ScrollableContainer

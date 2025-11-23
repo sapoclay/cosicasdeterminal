@@ -366,6 +366,15 @@ class DiagnosticToolsScreen(Screen):
                         yield Button("📋 Visor de Logs", variant="success", classes="app-button", id="btn-logviewer")
                         yield Static("Explora y busca archivos de logs del sistema", classes="description")
                 
+                # Fila 3
+                with Horizontal(classes="button-row"):
+                    with Vertical(classes="button-column"):
+                        yield Button("⏰ Wake on LAN", variant="warning", classes="app-button", id="btn-wol")
+                        yield Static("Envía paquetes mágicos para encender equipos remotamente", classes="description")
+                    with Vertical(classes="button-column"):
+                        yield Button("🔑 Gestor Conexiones", variant="primary", classes="app-button", id="btn-conn")
+                        yield Static("SSH, FTP, SFTP - Gestiona tus conexiones remotas", classes="description")
+                
                 yield Static("💡 Pulsa ESC para volver al menú principal", id="footer-info")
         yield Footer()
     
@@ -376,6 +385,8 @@ class DiagnosticToolsScreen(Screen):
             "btn-troubleshoot": "network_troubleshooter.py",
             "btn-geolatency": "geo_latency_monitor.py",
             "btn-logviewer": "log_viewer.py",
+            "btn-wol": "wake_on_lan.py",
+            "btn-conn": "connection_manager.py",
         }
         
         if event.button.id in actions:

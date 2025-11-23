@@ -96,8 +96,9 @@ class AboutScreen(Screen):
   • Monitor de latencia geográfica
   • Monitor de latencia geográfica
   • Visor de logs (Soporte CLI/SSH/Cross-platform)
+  • Wake on LAN y Gestor Conexiones (SSH/FTP)
   
-[bold yellow]25 herramientas profesionales en una suite[/]
+[bold yellow]27 herramientas profesionales en una suite[/]
 
 [bold blue]Tecnologías:[/]
   • Python 3.12+

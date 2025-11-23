@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 """
-Visor de Logs del Sistema
 Permite navegar, buscar y visualizar archivos de log de forma multiplataforma
 """
 
