@@ -44,10 +44,14 @@ python3 start.py
 14. **Detector de cambios** - Monitoriza la red y avisa de nuevos dispositivos
 15. **Localizador GeoIP** - Geolocalización de IPs y dominios en mapa
 16. **Inspector HTTP** - Analiza cabeceras, métodos y respuestas de APIs
-17. **Analizador de Paquetes** - Sniffer de tráfico en tiempo real (requiere root) HTTP/HTTPS
+17. **Analizador de Paquetes** - Sniffer de tráfico en tiempo real (requiere root)
+18. **Escucha de Puertos** - Mini-Netcat para recibir datos TCP/UDP en tiempo real HTTP/HTTPS
 
 ### Seguridad
 21. **Enumerador de subdominios** - Descubre subdominios vía certificados y DNS
+22. **Cambiador de MAC** - Spoofing de dirección MAC para privacidad
+23. **Crypto Tool** - Codificador/Decodificador y Hashing (Base64, Hex, MD5, SHA)
+24. **Extractor de Metadatos** - Visualiza datos Exif ocultos en imágenes
 
 ### Diagnóstico y Privacidad
 22. **Verificador de fugas** - Detecta fugas DNS, IPv6, WebRTC y verifica VPN

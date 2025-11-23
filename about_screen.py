@@ -85,6 +85,9 @@ class AboutScreen(Screen):
   • Localizador GeoIP para IPs y dominios
   • Inspector HTTP/API para pruebas de endpoints
   • Analizador de Paquetes (Sniffer) en tiempo real
+  • Escucha de Puertos (TCP/UDP) para diagnóstico
+  • Cambiador de MAC y Crypto Tool (Base64/Hash)
+  • Extractor de Metadatos (Exif) de imágenes
   • Analizador de vulnerabilidades de puertos
   • Generador y analizador de contraseñas seguras
   
@@ -100,7 +103,7 @@ class AboutScreen(Screen):
   • Visor de logs (Soporte CLI/SSH/Cross-platform)
   • Wake on LAN y Gestor Conexiones (SSH/FTP)
   
-[bold yellow]28 herramientas profesionales en una suite[/]
+[bold yellow]32 herramientas profesionales en una suite[/]
 
 [bold blue]Tecnologías:[/]
   • Python 3.12+

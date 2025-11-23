@@ -215,7 +215,7 @@ class AdvancedToolsScreen(Screen):
         with VerticalScroll():
             with Container(id="content"):
                 yield Static("⚙️ HERRAMIENTAS AVANZADAS", id="title")
-                yield Static("8 herramientas especializadas", id="subtitle")
+                yield Static("12 herramientas especializadas", id="subtitle")
                 
                 # Fila 1
                 with Horizontal(classes="button-row"):
@@ -256,9 +256,20 @@ class AdvancedToolsScreen(Screen):
                 # Fila 5
                 with Horizontal(classes="button-row"):
                     with Vertical(classes="button-column"):
-                        pass
+                        yield Button("👂 Escucha Puertos", variant="warning", classes="app-button", id="btn-listener")
+                        yield Static("Escucha en puertos TCP/UDP y muestra datos recibidos", classes="description")
                     with Vertical(classes="button-column"):
-                        pass
+                        yield Button("🎭 Cambiador MAC", variant="error", classes="app-button", id="btn-mac")
+                        yield Static("Cambia la dirección MAC de tus interfaces (Spoofing)", classes="description")
+
+                # Fila 6
+                with Horizontal(classes="button-row"):
+                    with Vertical(classes="button-column"):
+                        yield Button("🔐 Crypto Tool", variant="primary", classes="app-button", id="btn-crypto")
+                        yield Static("Codificador/Decodificador Base64, Hex, URL y Hashing", classes="description")
+                    with Vertical(classes="button-column"):
+                        yield Button("📷 Metadatos Exif", variant="success", classes="app-button", id="btn-meta")
+                        yield Static("Extrae metadatos ocultos de imágenes y archivos", classes="description")
                 
                 yield Static("💡 Pulsa ESC para volver al menú principal", id="footer-info")
         yield Footer()
@@ -274,6 +285,10 @@ class AdvancedToolsScreen(Screen):
             "btn-geoip": "geoip_locator.py",
             "btn-http": "http_inspector.py",
             "btn-sniffer": "packet_sniffer.py",
+            "btn-listener": "port_listener.py",
+            "btn-mac": "mac_changer.py",
+            "btn-crypto": "crypto_tool.py",
+            "btn-meta": "metadata_viewer.py",
         }
         
         if event.button.id in actions:
