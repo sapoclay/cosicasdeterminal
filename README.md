@@ -2,7 +2,7 @@
 
 <img width="1024" height="1024" alt="CosicasDeTerminal" src="https://github.com/user-attachments/assets/6718286a-5ba7-4896-a430-6d4928eb89e9" />
 
-Esta es una pequeña suite, que por el momento incluye 25 herramientas interactivas para diagnóstico de red y seguridad. Todo esto se ha desarrollado con [Textual](https://textual.textualize.io/) y Python.
+Esta es una pequeña suite, que por el momento incluye 37 herramientas interactivas para diagnóstico de red y seguridad. Todo esto se ha desarrollado con [Textual](https://textual.textualize.io/) y Python.
 
 **✨ Compatible con Windows, Linux y a lo mejor con macOS**
 
@@ -52,14 +52,20 @@ python3 start.py
 22. **Cambiador de MAC** - Spoofing de dirección MAC para privacidad
 23. **Crypto Tool** - Codificador/Decodificador y Hashing (Base64, Hex, MD5, SHA)
 24. **Extractor de Metadatos** - Visualiza datos Exif ocultos en imágenes
+25. **NetStat Monitor** - Monitor de conexiones de red en tiempo real
+26. **Verificador de Integridad (FIM)** - Detecta cambios no autorizados en archivos
+27. **Escáner WiFi** - Escanea redes inalámbricas cercanas (SSID, señal, seguridad)
 
 ### Diagnóstico y Privacidad
-22. **Verificador de fugas** - Detecta fugas DNS, IPv6, WebRTC y verifica VPN
-23. **Troubleshooter** - Diagnóstico automático de problemas con soluciones
-24. **Monitor de latencia geográfica** - Prueba latencia a regiones del mundo
-25. **Visor de logs** - Visualiza logs en terminal (compatible con SSH/Windows/Linux)
-26. **Wake on LAN** - Enciende equipos remotamente mediante paquetes mágicos
-27. **Gestor de Conexiones** - Gestiona conexiones SSH, FTP y SFTP rápidamente
+29. **Verificador de fugas** - Detecta fugas DNS, IPv6, WebRTC y verifica VPN
+30. **Troubleshooter** - Diagnóstico automático de problemas con soluciones
+31. **Monitor de latencia geográfica** - Prueba latencia a regiones del mundo
+32. **Visor de logs** - Visualiza logs en terminal (compatible con SSH/Windows/Linux)
+33. **Wake on LAN** - Enciende equipos remotamente mediante paquetes mágicos
+34. **Gestor de Conexiones** - Gestiona conexiones SSH, FTP y SFTP rápidamente
+35. **Analizador de Logs** - Mini-SIEM para analizar logs del sistema
+36. **Esteganografía** - Oculta y extrae mensajes en imágenes
+37. **Whois & Reputación** - Consulta información de dominios y reputación IP
 
 ## 🔧 Requisitos
 

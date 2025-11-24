@@ -69,48 +69,105 @@ def show_menu():
     print(f"{Colors.GREEN}Selecciona una herramienta:{Colors.NC}")
     print()
     
-    print(f"{Colors.CYAN}═══ Herramientas básicas ═══{Colors.NC}")
-    print("  1) 🔍 Escáner de RED LOCAL")
-    print("  2) 📊 Monitor de RED en tiempo real")
-    print("  3) 🛠️  Herramientas de diagnóstico")
-    print("  4) 🌐 Verificador de conectividad")
-    print("  5) 📡 Monitor de interfaces")
-    print("  6) 🔌 Escáner de puertos locales")
-    print("  7) 📶 Analizador de WiFI")
-    print("  8) 💾 Monitor de uso de RED")
-    print("  9) 🖥️  Info del sistema de RED")
-    print()
+    # Definir las listas de herramientas por categoría
+    basic_tools = [
+        "  1) 🔍 Escáner de RED LOCAL",
+        "  2) 📊 Monitor de RED en tiempo real",
+        "  3) 🛠️  Herramientas de diagnóstico",
+        "  4) 🌐 Verificador de conectividad",
+        "  5) 📡 Monitor de interfaces",
+        "  6) 🔌 Escáner de puertos locales",
+        "  7) 📶 Analizador de WiFI",
+        "  8) 💾 Monitor de uso de RED",
+        "  9) 🖥️  Info del sistema de RED"
+    ]
+
+    advanced_tools = [
+        " 10) 🔢 Calculadora IP Universal (v4/v6)",
+        " 11) 🔍 DNS avanzado",
+        " 12) 🔒  Verificador de SSL/TLS",
+        " 13) 🚀 Test de velocidad (speedtest)",
+        " 14) 🔍 Detector de cambios en RED",
+        " 15) 🌍 Localizador GEOIP",
+        " 16) 🕵️  Inspector HTTP/API",
+        " 17) 🦈 Analizador de Paquetes (Sniffer) [ROOT]",
+        " 18) 👂  Escucha de Puertos (Mini-Netcat)"
+    ]
+
+    security_tools = [
+        " 19) 🛡️  Analizador de vulnerabilidades",
+        " 20) 🔑 Generador de contraseñas",
+        " 21) 🌐 Analizador de seguridad Web",
+        " 22) 🔍 Enumerador de subdominios",
+        " 23) 🎭 Cambiador de MAC (Spoofer) [ROOT]",
+        " 24) 🔐 Decodificador Universal (Crypto)",
+        " 25) 📷 Extractor de Metadatos (Exif)",
+        " 26) 🕵️‍♂️ NetStat Monitor (Conexiones)",
+        " 27) 🛡️ Verificador de Integridad (FIM)",
+        " 28) 📡 Escáner WiFi (Wireless)"
+    ]
+
+    diagnostic_tools = [
+        " 29) 🔒  Verificador de fugas (DNS/IPv6/WebRTC)",
+        " 30) 🔧 Troubleshooter (diagnóstico automático)",
+        " 31) 🌍 Monitor de latencia geográfica",
+        " 32) 📋 Visor de logs del sistema",
+        " 33) ⏰ Wake on LAN (WoL)",
+        " 34) 🔑 Gestor de Conexiones (SSH/FTP/SFTP)",
+        " 35) 🛡️  Analizador de Logs (Mini-SIEM)",
+        " 36) 🖼️  Esteganografía (Stego Tool)",
+        " 37) 🌍  Whois & Reputación IP"
+    ]
+
+    # Función auxiliar para calcular el ancho visual aproximado
+    def get_visual_width(s):
+        width = 0
+        # Caracteres acentuados y otros símbolos comunes de ancho 1
+        single_width_chars = "áéíóúüñÁÉÍÓÚÑ¿¡"
+        
+        has_emoji = False
+        for char in s:
+            if ord(char) < 128:
+                width += 1
+            elif char in single_width_chars:
+                width += 1
+            else:
+                # Asumimos que cualquier otro caracter es parte de un emoji
+                has_emoji = True
+            
+        # Si detectamos caracteres de emoji, sumamos 2 al ancho total
+        # (Asumiendo 1 emoji por línea como en nuestras listas)
+        if has_emoji:
+            width += 2
+            
+        return width
+
+    # Función auxiliar para imprimir dos columnas
+    def print_two_columns(title1, list1, title2, list2):
+        # Imprimir títulos
+        print(f"{Colors.CYAN}{title1:<50}{title2}{Colors.NC}")
+        
+        # Determinar el número máximo de filas
+        max_rows = max(len(list1), len(list2))
+        
+        # Imprimir filas
+        for i in range(max_rows):
+            item1 = list1[i] if i < len(list1) else ""
+            item2 = list2[i] if i < len(list2) else ""
+            
+            # Calcular padding basado en ancho visual
+            vis_len = get_visual_width(item1)
+            padding = 55 - vis_len
+            if padding < 1: padding = 1
+            
+            print(f"{item1}{' ' * padding}{item2}")
+        print()
+
+    # Fila 1: Básicas y Avanzadas
+    print_two_columns("═══ Herramientas básicas ═══", basic_tools, "═══ Herramientas avanzadas ═══", advanced_tools)
     
-    print(f"{Colors.CYAN}═══ Herramientas avanzadas ═══{Colors.NC}")
-    print(" 10) 🔢 Calculadora IP Universal (v4/v6)")
-    print(" 11) 🔍 DNS avanzado")
-    print(" 12) 🔒 Verificador de SSL/TLS")
-    print(" 13) 🚀 Test de velocidad (speedtest)")
-    print(" 14) 🔍 Detector de cambios en RED")
-    print(" 15) 🌍 Localizador GEOIP")
-    print(" 16) 🕵️  Inspector HTTP/API")
-    print(" 17) 🦈 Analizador de Paquetes (Sniffer) [ROOT]")
-    print(" 18) 👂 Escucha de Puertos (Mini-Netcat)")
-    print()
-    
-    print(f"{Colors.CYAN}═══ Herramientas de seguridad ═══{Colors.NC}")
-    print(" 19) 🛡️  Analizador de vulnerabilidades")
-    print(" 20) 🔑 Generador de contraseñas")
-    print(" 21) 🌐 Analizador de seguridad Web")
-    print(" 22) 🔍 Enumerador de subdominios")
-    print(" 23) 🎭 Cambiador de MAC (Spoofer) [ROOT]")
-    print(" 24) 🔐 Decodificador Universal (Crypto)")
-    print(" 25) 📷 Extractor de Metadatos (Exif)")
-    print()
-    
-    print(f"{Colors.CYAN}═══ Diagnóstico y Privacidad ═══{Colors.NC}")
-    print(" 26) 🔒 Verificador de fugas (DNS/IPv6/WebRTC)")
-    print(" 27) 🔧 Troubleshooter (diagnóstico automático)")
-    print(" 28) 🌍 Monitor de latencia geográfica")
-    print(" 29) 📋 Visor de logs del sistema")
-    print(" 30) ⏰ Wake on LAN (WoL)")
-    print(" 31) 🔑 Gestor de Conexiones (SSH/FTP/SFTP)")
-    print()
+    # Fila 2: Seguridad y Diagnóstico
+    print_two_columns("═══ Herramientas de seguridad ═══", security_tools, "═══ Diagnóstico y Privacidad ═══", diagnostic_tools)
     
     print(f"{Colors.CYAN}═══ Otros ═══{Colors.NC}")
     print("  0) 🚀 Launcher (Menú GRÁFICO)")
@@ -154,6 +211,9 @@ def show_about():
     print("  • Monitor de latencia geográfica global")
     print("  • Visor de logs (CLI/TUI cross-platform)")
     print("  • Wake on LAN y Gestor Conexiones (SSH/FTP)")
+    print("  • Analizador de Logs (Mini-SIEM)")
+    print("  • Esteganografía (Ocultar datos en imágenes)")
+    print("  • Whois & Reputación IP")
     print()
     print(f"{Colors.BLUE}Tecnologías:{Colors.NC}")
     print("  • Python 3.12+")
@@ -208,12 +268,18 @@ def main():
         "23": ("mac_changer.py", "CAMBIADOR DE MAC"),
         "24": ("crypto_tool.py", "CRYPTO TOOL"),
         "25": ("metadata_viewer.py", "VISOR DE METADATOS"),
-        "26": ("leak_tester.py", "VERIFICADOR DE FUGAS"),
-        "27": ("network_troubleshooter.py", "TROUBLESHOOTER"),
-        "28": ("geo_latency_monitor.py", "MONITOR DE LATENCIA GEOGRÁFICA"),
-        "29": ("log_viewer.py", "VISOR DE LOGS"),
-        "30": ("wake_on_lan.py", "WAKE ON LAN"),
-        "31": ("connection_manager.py", "GESTOR DE CONEXIONES"),
+        "26": ("netstat_monitor.py", "NETSTAT MONITOR"),
+        "27": ("file_integrity.py", "VERIFICADOR INTEGRIDAD"),
+        "28": ("wifi_scanner.py", "ESCÁNER WIFI"),
+        "29": ("leak_tester.py", "VERIFICADOR DE FUGAS"),
+        "30": ("network_troubleshooter.py", "TROUBLESHOOTER"),
+        "31": ("geo_latency_monitor.py", "MONITOR DE LATENCIA GEOGRÁFICA"),
+        "32": ("log_viewer.py", "VISOR DE LOGS"),
+        "33": ("wake_on_lan.py", "WAKE ON LAN"),
+        "34": ("connection_manager.py", "GESTOR DE CONEXIONES"),
+        "35": ("log_analyzer.py", "ANALIZADOR DE LOGS"),
+        "36": ("stego_tool.py", "ESTEGANOGRAFÍA"),
+        "37": ("whois_checker.py", "WHOIS & REPUTACIÓN"),
         "0": ("launcher.py", "Launcher Gráfico")
     }
 

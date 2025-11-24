@@ -27,7 +27,7 @@ class MainMenuScreen(Screen):
                 yield Static("🌐 COSICAS DE TERMINAL", id="title")
                 yield Static("Selecciona una categoría de herramientas", id="subtitle")
                 
-                # Herramientas Básicas
+                # Fila 1: Básicas y Avanzadas
                 with Horizontal(classes="button-row"):
                     with Vertical(classes="button-column"):
                         yield Button("🔧 Herramientas Básicas", 
@@ -38,20 +38,18 @@ class MainMenuScreen(Screen):
                             "9 herramientas fundamentales de análisis y monitoreo de red",
                             classes="description"
                         )
-                
-                # Herramientas Avanzadas
-                with Horizontal(classes="button-row"):
+                    
                     with Vertical(classes="button-column"):
                         yield Button("⚙️ Herramientas avanzadas", 
                                    variant="success", 
                                    classes="category-button",
                                    id="cat-advanced")
                         yield Static(
-                            "7 herramientas especializadas para diagnóstico y análisis profundo",
+                            "15 herramientas especializadas para diagnóstico y análisis profundo",
                             classes="description"
                         )
                 
-                # Herramientas de Seguridad
+                # Fila 2: Seguridad y Diagnóstico
                 with Horizontal(classes="button-row"):
                     with Vertical(classes="button-column"):
                         yield Button("🔒 Herramientas de Seguridad", 
@@ -62,16 +60,14 @@ class MainMenuScreen(Screen):
                             "5 herramientas para análisis de seguridad y vulnerabilidades",
                             classes="description"
                         )
-                
-                # Diagnóstico y Privacidad
-                with Horizontal(classes="button-row"):
+                    
                     with Vertical(classes="button-column"):
                         yield Button("🔧 Diagnóstico y Privacidad", 
                                    variant="error", 
                                    classes="category-button",
                                    id="cat-diagnostic")
                         yield Static(
-                            "4 herramientas avanzadas para diagnóstico y verificación de privacidad",
+                            "9 herramientas avanzadas para diagnóstico y privacidad",
                             classes="description"
                         )
                 
@@ -118,6 +114,12 @@ class MainMenuScreen(Screen):
             self.app.push_screen(AboutScreen())
         elif event.button.id == "btn-quit":
             self.app.exit()
+        elif event.button.id == "btn-logs-siem":
+            self.run_tool("log_analyzer.py")
+        elif event.button.id == "btn-stego":
+            self.run_tool("stego_tool.py")
+        elif event.button.id == "btn-whois":
+            self.run_tool("whois_checker.py")
 
 
 class BasicToolsScreen(Screen):
@@ -215,7 +217,7 @@ class AdvancedToolsScreen(Screen):
         with VerticalScroll():
             with Container(id="content"):
                 yield Static("⚙️ HERRAMIENTAS AVANZADAS", id="title")
-                yield Static("12 herramientas especializadas", id="subtitle")
+                yield Static("15 herramientas especializadas", id="subtitle")
                 
                 # Fila 1
                 with Horizontal(classes="button-row"):
@@ -270,6 +272,23 @@ class AdvancedToolsScreen(Screen):
                     with Vertical(classes="button-column"):
                         yield Button("📷 Metadatos Exif", variant="success", classes="app-button", id="btn-meta")
                         yield Static("Extrae metadatos ocultos de imágenes y archivos", classes="description")
+
+                # Fila 7
+                with Horizontal(classes="button-row"):
+                    with Vertical(classes="button-column"):
+                        yield Button("🕵️‍♂️ NetStat Monitor", variant="warning", classes="app-button", id="btn-netstat")
+                        yield Static("Monitor de conexiones de red en tiempo real", classes="description")
+                    with Vertical(classes="button-column"):
+                        yield Button("🛡️ Integridad (FIM)", variant="error", classes="app-button", id="btn-fim")
+                        yield Static("Detecta cambios no autorizados en tus archivos", classes="description")
+
+                # Fila 8
+                with Horizontal(classes="button-row"):
+                    with Vertical(classes="button-column"):
+                        yield Button("📡 Escáner WiFi", variant="primary", classes="app-button", id="btn-wifi")
+                        yield Static("Escanea redes inalámbricas cercanas (nmcli)", classes="description")
+                    with Vertical(classes="button-column"):
+                        pass
                 
                 yield Static("💡 Pulsa ESC para volver al menú principal", id="footer-info")
         yield Footer()
@@ -289,6 +308,9 @@ class AdvancedToolsScreen(Screen):
             "btn-mac": "mac_changer.py",
             "btn-crypto": "crypto_tool.py",
             "btn-meta": "metadata_viewer.py",
+            "btn-netstat": "netstat_monitor.py",
+            "btn-fim": "file_integrity.py",
+            "btn-wifi": "wifi_scanner.py",
         }
         
         if event.button.id in actions:
@@ -396,8 +418,25 @@ class DiagnosticToolsScreen(Screen):
                         yield Button("⏰ Wake on LAN", variant="warning", classes="app-button", id="btn-wol")
                         yield Static("Envía paquetes mágicos para encender equipos remotamente", classes="description")
                     with Vertical(classes="button-column"):
-                        yield Button("🔑 Gestor Conexiones", variant="primary", classes="app-button", id="btn-conn")
+                        yield Button("🔑 Gestor Conexiones", variant="primary", classes="app-button", id="btn-connections")
                         yield Static("SSH, FTP, SFTP - Gestiona tus conexiones remotas", classes="description")
+
+                # Fila 4
+                with Horizontal(classes="button-row"):
+                    with Vertical(classes="button-column"):
+                        yield Button("🌍 Whois Check", variant="primary", classes="app-button", id="btn-whois")
+                        yield Static("Consulta información de dominios y IPs", classes="description")
+                    with Vertical(classes="button-column"):
+                        yield Button("🖼️ Stego Tool", variant="warning", classes="app-button", id="btn-stego")
+                        yield Static("Oculta mensajes en imágenes y otros archivos", classes="description")
+
+                # Fila 5
+                with Horizontal(classes="button-row"):
+                    with Vertical(classes="button-column"):
+                        yield Button("🛡️ Log Analyzer", variant="error", classes="app-button", id="btn-logs-siem")
+                        yield Static("Analiza logs del sistema para eventos de seguridad", classes="description")
+                    with Vertical(classes="button-column"):
+                        pass
                 
                 yield Static("💡 Pulsa ESC para volver al menú principal", id="footer-info")
         yield Footer()

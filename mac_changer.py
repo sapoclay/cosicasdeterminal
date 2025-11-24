@@ -105,48 +105,89 @@ class MacChangerApp(App):
             self.query_one("#btn-restore", Button).disabled = True
 
     def refresh_interfaces(self):
+        import platform
+        system = platform.system()
+        
         try:
-            # Get interfaces using ip link
-            result = subprocess.run(['ip', 'link', 'show'], capture_output=True, text=True)
-            output = result.stdout
-            
             interfaces = []
-            # Parse output (simple regex)
-            for line in output.split('\n'):
-                if line and line[0].isdigit():
-                    parts = line.split(': ')
-                    if len(parts) >= 2:
-                        iface = parts[1].strip()
-                        if iface != "lo": # Exclude loopback
-                            interfaces.append((iface, iface))
             
+            if system == "Linux":
+                result = subprocess.run(['ip', 'link', 'show'], capture_output=True, text=True)
+                for line in result.stdout.split('\n'):
+                    if line and line[0].isdigit():
+                        parts = line.split(': ')
+                        if len(parts) >= 2:
+                            iface = parts[1].strip()
+                            if iface != "lo":
+                                interfaces.append((iface, iface))
+                                
+            elif system == "Darwin": # macOS
+                result = subprocess.run(['networksetup', '-listallhardwareports'], capture_output=True, text=True)
+                # Hardware Port: Wi-Fi
+                # Device: en0
+                lines = result.stdout.split('\n')
+                for i, line in enumerate(lines):
+                    if "Device:" in line:
+                        iface = line.split(": ")[1].strip()
+                        interfaces.append((iface, iface))
+                        
+            elif system == "Windows":
+                # getmac /v /fo csv
+                result = subprocess.run(['getmac', '/v', '/fo', 'csv'], capture_output=True, text=True)
+                # "Connection Name","Network Adapter","Physical Address","Transport Name"
+                import csv
+                import io
+                reader = csv.reader(io.StringIO(result.stdout))
+                next(reader, None) # Skip header
+                for row in reader:
+                    if len(row) > 0:
+                        name = row[0]
+                        # adapter = row[1]
+                        interfaces.append((name, name))
+                        
             select = self.query_one("#iface-select", Select)
             select.set_options(interfaces)
             
         except Exception as e:
             self.notify(f"Error al listar interfaces: {e}", severity="error")
 
-    def on_select_changed(self, event: Select.Changed) -> None:
-        if event.select.id == "iface-select" and event.value:
-            self.update_current_mac(event.value)
-
     def update_current_mac(self, iface):
+        import platform
+        system = platform.system()
+        
         try:
-            result = subprocess.run(['ip', 'link', 'show', iface], capture_output=True, text=True)
-            output = result.stdout
+            mac = "Desconocida"
             
-            # Find MAC
-            mac_match = re.search(r"link/ether ([\da-fA-F:]{17})", output)
-            if mac_match:
-                current_mac = mac_match.group(1)
-                self.query_one("#current-mac-info", Static).update(
-                    f"Interfaz: [bold cyan]{iface}[/]\nMAC Actual: [bold green]{current_mac}[/]"
-                )
-            else:
-                self.query_one("#current-mac-info", Static).update(f"Interfaz: {iface}\nMAC: No encontrada")
+            if system == "Linux":
+                result = subprocess.run(['ip', 'link', 'show', iface], capture_output=True, text=True)
+                mac_match = re.search(r"link/ether ([\da-fA-F:]{17})", result.stdout)
+                if mac_match: mac = mac_match.group(1)
+                
+            elif system == "Darwin":
+                result = subprocess.run(['ifconfig', iface], capture_output=True, text=True)
+                mac_match = re.search(r"ether ([\da-fA-F:]{17})", result.stdout)
+                if mac_match: mac = mac_match.group(1)
+                
+            elif system == "Windows":
+                result = subprocess.run(['getmac', '/v', '/fo', 'csv'], capture_output=True, text=True)
+                import csv
+                import io
+                reader = csv.reader(io.StringIO(result.stdout))
+                for row in reader:
+                    if len(row) > 2 and row[0] == iface:
+                        mac = row[2]
+                        break
+            
+            self.query_one("#current-mac-info", Static).update(
+                f"Interfaz: [bold cyan]{iface}[/]\nMAC Actual: [bold green]{mac}[/]"
+            )
                 
         except Exception as e:
             self.notify(f"Error obteniendo MAC: {e}", severity="error")
+
+    def on_select_changed(self, event: Select.Changed) -> None:
+        if event.select.id == "iface-select" and event.value:
+            self.update_current_mac(event.value)
 
     def on_button_pressed(self, event: Button.Pressed) -> None:
         if event.button.id == "btn-random":
@@ -154,7 +195,7 @@ class MacChangerApp(App):
         elif event.button.id == "btn-apply":
             self.change_mac()
         elif event.button.id == "btn-restore":
-            self.restore_mac() # This is tricky without storing original, maybe just notify user
+            self.restore_mac()
 
     def generate_random_mac(self):
         # Generate random MAC (unicast, locally administered)
@@ -183,14 +224,26 @@ class MacChangerApp(App):
         self.run_worker(lambda: self._perform_mac_change(iface, new_mac), thread=True)
 
     def _perform_mac_change(self, iface, new_mac):
+        import platform
+        system = platform.system()
+        
         try:
-            # 1. Down interface
-            subprocess.run(['ip', 'link', 'set', 'dev', iface, 'down'], check=True)
-            # 2. Change MAC
-            subprocess.run(['ip', 'link', 'set', 'dev', iface, 'address', new_mac], check=True)
-            # 3. Up interface
-            subprocess.run(['ip', 'link', 'set', 'dev', iface, 'up'], check=True)
-            
+            if system == "Linux":
+                subprocess.run(['ip', 'link', 'set', 'dev', iface, 'down'], check=True)
+                subprocess.run(['ip', 'link', 'set', 'dev', iface, 'address', new_mac], check=True)
+                subprocess.run(['ip', 'link', 'set', 'dev', iface, 'up'], check=True)
+                
+            elif system == "Darwin":
+                # sudo ifconfig en0 ether xx:xx:xx:xx:xx:xx
+                # Note: macOS often disassociates WiFi when changing MAC
+                subprocess.run(['ifconfig', iface, 'ether', new_mac], check=True)
+                
+            elif system == "Windows":
+                self.app.call_from_thread(self.notify, "Cambio de MAC no soportado en Windows CLI automáticamente.", severity="error")
+                self.app.call_from_thread(self.query_one("#status-box", Static).update, 
+                                        "[yellow]En Windows, usa el Administrador de Dispositivos o herramientas de terceros (TMAC).[/]")
+                return
+
             self.app.call_from_thread(self.notify, "¡MAC cambiada con éxito!", severity="information")
             self.app.call_from_thread(self.update_current_mac, iface)
             self.app.call_from_thread(self.query_one("#status-box", Static).update, 

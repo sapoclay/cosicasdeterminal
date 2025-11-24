@@ -61,6 +61,12 @@ class PortListenerApp(App):
         width: auto;
         padding: 0 1;
     }
+    
+    Button {
+        width: auto;
+        min-width: 16;
+        margin: 0 1;
+    }
     """
     
     BINDINGS = [
@@ -116,13 +122,18 @@ class PortListenerApp(App):
             self.query_one("#log-output", RichLog).clear()
 
     def action_toggle_listen(self):
-        if self.listening:
-            self.stop_listening()
-        else:
-            self.start_listening()
+        try:
+            if self.listening:
+                self.stop_listening()
+            else:
+                self.start_listening()
+        except Exception as e:
+            self.notify(f"Error: {e}", severity="error")
             
     def action_clear_log(self):
-        self.query_one("#log-output", RichLog).clear()
+        try:
+            self.query_one("#log-output", RichLog).clear()
+        except: pass
 
     def start_listening(self):
         if self.listening: return
